@@ -1,103 +1,75 @@
 import Image from "next/image";
+import { AIChatInterface } from "../components/ai-chat-interface";
+import { ProjectManagerComparison } from "../components/project-manager-comparison";
+import { TradeComparison } from "@/components/trade-comparison";
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+    <div className="px-[100px] bg-light-50">
+      {/* Header with logo and Homeflow name*/}
+      <div className="flex justify-start gap-4 items-center bg-light-50 px-14 py-4">
+        <Image className="h-8 w-10" src="/images/HomeFlow-Logomark-dark.png" alt="Homeflow Logo" width={100} height={100} />
+        <h1 className="text-2xl font-medium mb-4 font-montserrat-alternates text-dark-100 mt-4">Homeflow</h1>
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* alerts */}
+      <div className="m-4 p-10 text-blue-200">
+      <div className=" border-yellow-600 border-2 rounded-lg p-4 bg-yellow-50">
+        <h2 className="text-lg font-medium mb-4 font-montserrat-alternates text-yellow-600">Weather Alert</h2>
+        <p className="text-sm font-circular-std mb-4 text-dark-100">There is a 60% chance of rain this Thursday which may effect the following jobs: Crooked Creek 79, Whispering Pines 1</p>
+        {/* dismiss button */}
+        <div className="flex justify-end">
+          <button className="bg-yellow-600 text-white px-4 py-2 rounded-lg hover:bg-yellow-700 transition-colors duration-300">Dismiss</button>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      </div>
+
+
+
+      {/* weekly summary */}
+      <div className="m-4 p-10 text-blue-200">
+        <h1 className="text-lg font-2xl mb-4 font-montserrat-alternates font-bold text-blue-200">Weekly Summary</h1>
+       <div className="flex justify-between flex-row">
+        <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
+          <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">Homes Under Construction</h3>
+          <p className="text-8xl font-circular-std mb-4 text-dark-100">54</p>
+       </div>
+       <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
+          <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">Finishes This Week</h3>
+          <p className="text-8xl font-circular-std mb-4 text-dark-100">3</p>
+       </div>
+       <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
+        <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">Jobsite Health</h3>
+        <div className="w-full h-4 bg-gray-300 rounded-full">
+          <div className="h-4 bg-dark-100 rounded-full" style={{ width: '95%' }}></div>
+        </div>
+       </div>
+       <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
+          <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">Progress to Yearly Goal</h3>
+          <div className="w-full h-4 bg-gray-300 rounded-full">
+            <div className="h-4 bg-dark-100 rounded-full" style={{ width: '95%' }}></div>
+          </div>
+       </div>
+       </div>
+      </div>    
+    
+      <ProjectManagerComparison /> 
+
+      <TradeComparison />
+
+      {/* AI Analyst */}
+      <div className="m-4 p-10 text-blue-200">
+        <AIChatInterface />
+      </div>
+
+      {/* <h1 className="text-4xl font-bold mb-4">Font Test</h1>
+      <p className="text-lg font-circular-std mb-4">This is Circular Std</p>
+      <p className="text-lg font-poppins mb-4">This is Poppins</p>
+      <p className="text-lg font-montserrat-alternates mb-4">This is Montserrat Alternates</p>
+      <p className="text-lg mb-4">This is the default font</p>
+      
+      <div className="mt-8 p-4 bg-blue-100 text-white">Blue 100 background</div>
+      <div className="mt-4 p-4 bg-orange text-white">Orange background</div> */}
     </div>
   );
 }

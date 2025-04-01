@@ -1,15 +1,44 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins, Montserrat_Alternates } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const poppins = Poppins({
+  variable: "--font-poppins",
+  weight: ['400', '500', '600', '700'],
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const montserratAlternates = Montserrat_Alternates({
+  variable: "--font-montserrat-alternates",
   subsets: ["latin"],
+  weight: ['400', '500', '600', '700'],
+});
+
+const circularStd = localFont({
+  src: [
+    {
+      path: "../public/fonts/CircularStd-Book.woff2",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/CircularStd-Book.woff",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/CircularStd-Bold.woff2",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/CircularStd-Bold.woff",
+      weight: "700",
+      style: "normal",
+    },
+  ],
+  variable: "--font-circular-std",
 });
 
 export const metadata: Metadata = {
@@ -25,10 +54,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} ${montserratAlternates.variable} ${circularStd.variable} antialiased`}
       >
         {children}
       </body>
     </html>
   );
 }
+
