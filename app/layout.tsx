@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${poppins.variable} ${montserratAlternates.variable} ${circularStd.variable} antialiased`}
+        className={`${poppins.variable} ${montserratAlternates.variable} ${circularStd.variable} antialiased overscroll-none touch-none`}
       >
         <div className="flex min-h-screen">
           <SideMenu />

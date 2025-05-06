@@ -41,7 +41,7 @@ export function ProjectManagerComparison() {
           {/* Main chart container */}
           <div className="absolute left-0 right-0 top-0 bottom-0 flex">
             {/* Y-axis */}
-            <div className="w-8 flex flex-col justify-between" style={{ height: '320px', marginTop: '40px' }}>
+            <div className="w-8 flex flex-col justify-between" style={{ height: '320px' }}>
               {selectedMetric === "onTimeCompletion" ? (
                 // Percentage scale for On Time Completion
                 [100, 75, 50, 25, 0].map((value) => (
@@ -67,37 +67,7 @@ export function ProjectManagerComparison() {
             </div>
 
             {/* Chart area */}
-            <div className="flex-1 relative" style={{ height: '320px', marginTop: '40px' }}>
-              {/* Grid Lines */}
-              {selectedMetric === "onTimeCompletion" ? (
-                // Grid lines for percentage
-                [100, 75, 50, 25, 0].map((value) => (
-                  <div 
-                    key={value} 
-                    className="absolute w-full border-b border-dashed border-light-200"
-                    style={{ bottom: `${(value / 100) * 320}px` }}
-                  />
-                ))
-              ) : selectedMetric === "homesUnderConstruction" ? (
-                // Grid lines for homes
-                [20, 15, 10, 5, 0].map((value) => (
-                  <div 
-                    key={value} 
-                    className="absolute w-full border-b border-dashed border-light-200"
-                    style={{ bottom: `${(value / 20) * 320}px` }}
-                  />
-                ))
-              ) : (
-                // Grid lines for communities
-                [5, 4, 3, 2, 1, 0].map((value) => (
-                  <div 
-                    key={value} 
-                    className="absolute w-full border-b border-dashed border-light-200"
-                    style={{ bottom: `${(value / 5) * 320}px` }}
-                  />
-                ))
-              )}
-
+            <div className="flex-1 relative" style={{ height: '320px', marginTop: '50px' }}>
               {/* Bars */}
               <div className="absolute left-0 right-0 h-[320px]">
                 {projectManagers.map((pm, index) => (

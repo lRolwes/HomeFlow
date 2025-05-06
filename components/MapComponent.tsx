@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, forwardRef, useImperativeHandle } from "react";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { 
   Home, 
@@ -37,7 +37,12 @@ const statusIcons = {
   available: <Info className="h-4 w-4" />,
 };
 
-export function MapComponent() {
+interface MapComponentProps {
+  center: { lat: number; lng: number };
+  zoom?: number;
+}
+
+export const MapComponent = ({ center, zoom = 17 }: MapComponentProps) => {
   const [selectedStatus, setSelectedStatus] = useState<LotStatus[]>([]);
   const [scale, setScale] = useState(1);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -46,6 +51,239 @@ export function MapComponent() {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const markersRef = useRef<L.Marker[]>([]);
+
+  // Update map center when props change
+  useEffect(() => {
+    if (mapInstance.current) {
+      mapInstance.current.setView([center.lat, center.lng], zoom);
+      mapInstance.current.invalidateSize();
+    }
+  }, [center.lat, center.lng, zoom]);
+
+  useEffect(() => {
+    if (mapRef.current) {
+      if (mapInstance.current) {
+        mapInstance.current.remove();
+        mapInstance.current = null;
+      }
+
+      mapInstance.current = L.map(mapRef.current!, {
+        center: [center.lat, center.lng],
+        zoom: zoom,
+        zoomControl: true,
+        attributionControl: true
+      });
+
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20
+      }).addTo(mapInstance.current);
+
+      // Clear existing markers
+      markersRef.current = [];
+
+      // Add marker for Lot 101
+      const marker1 = L.marker([41.607442, -93.889172], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker1);
+
+      const popup1 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 101</strong><br>
+            Phase: Framing<br>
+            Status: Under Construction<br>
+            Buyer: John Smith
+          </div>`
+        );
+
+      marker1.on('mouseover', () => {
+        marker1.bindPopup(popup1).openPopup();
+      });
+
+      marker1.on('mouseout', () => {
+        marker1.closePopup();
+      });
+
+      // Add marker for Lot 102
+      const marker2 = L.marker([41.607430, -93.889929], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker2);
+
+      const popup2 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 102</strong><br>
+            Phase: Electrical<br>
+            Status: Under Construction<br>
+            Buyer: Sarah Johnson
+          </div>`
+        );
+
+      marker2.on('mouseover', () => {
+        marker2.bindPopup(popup2).openPopup();
+      });
+
+      marker2.on('mouseout', () => {
+        marker2.closePopup();
+      });
+
+      // Add marker for Lot 103
+      const marker3 = L.marker([41.607860, -93.890659], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker3);
+
+      const popup3 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 103</strong><br>
+            Phase: Plumbing<br>
+            Status: Under Construction<br>
+            Buyer: Michael Brown
+          </div>`
+        );
+
+      marker3.on('mouseover', () => {
+        marker3.bindPopup(popup3).openPopup();
+      });
+
+      marker3.on('mouseout', () => {
+        marker3.closePopup();
+      });
+
+      // Add marker for Lot 104
+      const marker4 = L.marker([41.607433, -93.890898], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker4);
+
+      const popup4 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 104</strong><br>
+            Phase: Drywall<br>
+            Status: Under Construction<br>
+            Buyer: Emily Davis
+          </div>`
+        );
+
+      marker4.on('mouseover', () => {
+        marker4.bindPopup(popup4).openPopup();
+      });
+
+      marker4.on('mouseout', () => {
+        marker4.closePopup();
+      });
+
+      // Add marker for Lot 105
+      const marker5 = L.marker([41.607860, -93.889432], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker5);
+
+      const popup5 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 105</strong><br>
+            Phase: n/a<br>
+            Status: Available<br>
+            Buyer: n/a
+          </div>`
+        );
+
+      marker5.on('mouseover', () => {
+        marker5.bindPopup(popup5).openPopup();
+      });
+
+      marker5.on('mouseout', () => {
+        marker5.closePopup();
+      });
+
+      // Add marker for Lot 106
+      const marker6 = L.marker([41.607858, -93.889679], { icon: blueIcon })
+        .addTo(mapInstance.current!);
+      markersRef.current.push(marker6);
+
+      const popup6 = L.popup()
+        .setContent(
+          `<div style="color: #0075ff; font-size: 14px;">
+            <strong>Lot 106</strong><br>
+            Phase: Framing<br>
+            Status: Delayed<br>
+            Buyer: Jessica Taylor
+          </div>`
+        );
+
+      marker6.on('mouseover', () => {
+        marker6.bindPopup(popup6).openPopup();
+      });
+
+      marker6.on('mouseout', () => {
+        marker6.closePopup();
+      });
+
+      // Add new markers
+      const newMarkers = [
+        { lat: 41.607860, lng: -93.889205, lot: "107" },
+        { lat: 41.607429, lng: -93.889448, lot: "108" },
+        { lat: 41.607429, lng: -93.889695, lot: "109" },
+        { lat: 41.607860, lng: -93.889921, lot: "110" },
+        { lat: 41.607860, lng: -93.890200, lot: "111" },
+        { lat: 41.607860, lng: -93.890409, lot: "112" },
+        { lat: 41.607429, lng: -93.890189, lot: "113" },
+        { lat: 41.607429, lng: -93.890441, lot: "114" },
+        { lat: 41.607429, lng: -93.890699, lot: "115" },
+        { lat: 41.607429, lng: -93.891171, lot: "116" },
+        { lat: 41.607429, lng: -93.891418, lot: "117" },
+        { lat: 41.607860, lng: -93.890924, lot: "118" },
+        { lat: 41.607860, lng: -93.891155, lot: "119" },
+        { lat: 41.607860, lng: -93.891402, lot: "120" }
+      ];
+
+      newMarkers.forEach(({ lat, lng, lot }) => {
+        const marker = L.marker([lat, lng], { icon: blueIcon })
+          .addTo(mapInstance.current!);
+        markersRef.current.push(marker);
+
+        const popup = L.popup()
+          .setContent(
+            `<div style="color: #0075ff; font-size: 14px;">
+              <strong>Lot ${lot}</strong><br>
+              Phase: Planning<br>
+              Status: Available<br>
+              Buyer: n/a
+            </div>`
+          );
+
+        marker.on('mouseover', () => {
+          marker.bindPopup(popup).openPopup();
+        });
+
+        marker.on('mouseout', () => {
+          marker.closePopup();
+        });
+      });
+
+      // Update marker colors based on initial status
+      updateMarkerColors();
+
+      mapInstance.current.invalidateSize();
+      console.log('Map initialized');
+
+      return () => {
+        if (mapInstance.current) {
+          mapInstance.current.remove();
+          mapInstance.current = null;
+        }
+      };
+    }
+  }, []);
+
+  // Update marker colors whenever selectedStatus changes
+  useEffect(() => {
+    if (mapInstance.current) {
+      updateMarkerColors();
+    }
+  }, [selectedStatus]);
 
   const blueIcon = new L.Icon({
     iconUrl: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%230075ff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/%3E%3Cpolyline points='9 22 9 12 15 12 15 22'/%3E%3C/svg%3E",
@@ -83,232 +321,6 @@ export function MapComponent() {
       }
     });
   };
-
-  useEffect(() => {
-    if (mapRef.current) {
-      if (mapInstance.current) {
-        mapInstance.current.remove();
-        mapInstance.current = null;
-      }
-
-      setTimeout(() => {
-        mapInstance.current = L.map(mapRef.current!, {
-          center: [41.607442, -93.889172],
-          zoom: 17,
-          zoomControl: true,
-          attributionControl: true
-        });
-
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-          subdomains: 'abcd',
-          maxZoom: 20
-        }).addTo(mapInstance.current);
-
-        // Clear existing markers
-        markersRef.current = [];
-
-        // Add marker for Lot 101
-        const marker1 = L.marker([41.607442, -93.889172], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker1);
-
-        const popup1 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 101</strong><br>
-              Phase: Framing<br>
-              Status: Under Construction<br>
-              Buyer: John Smith
-            </div>`
-          );
-
-        marker1.on('mouseover', () => {
-          marker1.bindPopup(popup1).openPopup();
-        });
-
-        marker1.on('mouseout', () => {
-          marker1.closePopup();
-        });
-
-        // Add marker for Lot 102
-        const marker2 = L.marker([41.607430, -93.889929], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker2);
-
-        const popup2 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 102</strong><br>
-              Phase: Electrical<br>
-              Status: Under Construction<br>
-              Buyer: Sarah Johnson
-            </div>`
-          );
-
-        marker2.on('mouseover', () => {
-          marker2.bindPopup(popup2).openPopup();
-        });
-
-        marker2.on('mouseout', () => {
-          marker2.closePopup();
-        });
-
-        // Add marker for Lot 103
-        const marker3 = L.marker([41.607860, -93.890659], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker3);
-
-        const popup3 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 103</strong><br>
-              Phase: Plumbing<br>
-              Status: Under Construction<br>
-              Buyer: Michael Brown
-            </div>`
-          );
-
-        marker3.on('mouseover', () => {
-          marker3.bindPopup(popup3).openPopup();
-        });
-
-        marker3.on('mouseout', () => {
-          marker3.closePopup();
-        });
-
-        // Add marker for Lot 104
-        const marker4 = L.marker([41.607433, -93.890898], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker4);
-
-        const popup4 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 104</strong><br>
-              Phase: Drywall<br>
-              Status: Under Construction<br>
-              Buyer: Emily Davis
-            </div>`
-          );
-
-        marker4.on('mouseover', () => {
-          marker4.bindPopup(popup4).openPopup();
-        });
-
-        marker4.on('mouseout', () => {
-          marker4.closePopup();
-        });
-
-        // Add marker for Lot 105
-        const marker5 = L.marker([41.607860, -93.889432], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker5);
-
-        const popup5 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 105</strong><br>
-              Phase: n/a<br>
-              Status: Available<br>
-              Buyer: n/a
-            </div>`
-          );
-
-        marker5.on('mouseover', () => {
-          marker5.bindPopup(popup5).openPopup();
-        });
-
-        marker5.on('mouseout', () => {
-          marker5.closePopup();
-        });
-
-        // Add marker for Lot 106
-        const marker6 = L.marker([41.607858, -93.889679], { icon: blueIcon })
-          .addTo(mapInstance.current!);
-        markersRef.current.push(marker6);
-
-        const popup6 = L.popup()
-          .setContent(
-            `<div style="color: #0075ff; font-size: 14px;">
-              <strong>Lot 106</strong><br>
-              Phase: Framing<br>
-              Status: Delayed<br>
-              Buyer: Jessica Taylor
-            </div>`
-          );
-
-        marker6.on('mouseover', () => {
-          marker6.bindPopup(popup6).openPopup();
-        });
-
-        marker6.on('mouseout', () => {
-          marker6.closePopup();
-        });
-
-        // Add new markers
-        const newMarkers = [
-          { lat: 41.607860, lng: -93.889205, lot: "107" },
-          { lat: 41.607429, lng: -93.889448, lot: "108" },
-          { lat: 41.607429, lng: -93.889695, lot: "109" },
-          { lat: 41.607860, lng: -93.889921, lot: "110" },
-          { lat: 41.607860, lng: -93.890200, lot: "111" },
-          { lat: 41.607860, lng: -93.890409, lot: "112" },
-          { lat: 41.607429, lng: -93.890189, lot: "113" },
-          { lat: 41.607429, lng: -93.890441, lot: "114" },
-          { lat: 41.607429, lng: -93.890699, lot: "115" },
-          { lat: 41.607429, lng: -93.891171, lot: "116" },
-          { lat: 41.607429, lng: -93.891418, lot: "117" },
-          { lat: 41.607860, lng: -93.890924, lot: "118" },
-          { lat: 41.607860, lng: -93.891155, lot: "119" },
-          { lat: 41.607860, lng: -93.891402, lot: "120" }
-        ];
-
-        newMarkers.forEach(({ lat, lng, lot }) => {
-          const marker = L.marker([lat, lng], { icon: blueIcon })
-            .addTo(mapInstance.current!);
-          markersRef.current.push(marker);
-
-          const popup = L.popup()
-            .setContent(
-              `<div style="color: #0075ff; font-size: 14px;">
-                <strong>Lot ${lot}</strong><br>
-                Phase: Planning<br>
-                Status: Available<br>
-                Buyer: n/a
-              </div>`
-            );
-
-          marker.on('mouseover', () => {
-            marker.bindPopup(popup).openPopup();
-          });
-
-          marker.on('mouseout', () => {
-            marker.closePopup();
-          });
-        });
-
-        // Update marker colors based on initial status
-        updateMarkerColors();
-
-        mapInstance.current.invalidateSize();
-      }, 100);
-
-      return () => {
-        if (mapInstance.current) {
-          mapInstance.current.remove();
-          mapInstance.current = null;
-        }
-      };
-    }
-  }, []);
-
-  // Update marker colors whenever selectedStatus changes
-  useEffect(() => {
-    if (mapInstance.current) {
-      updateMarkerColors();
-    }
-  }, [selectedStatus]);
 
   return (
     <div className="space-y-4">
@@ -363,4 +375,4 @@ export function MapComponent() {
       </div>
     </div>
   );
-} 
+}; 

@@ -1,20 +1,8 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { 
-  Home, 
-  Construction, 
-  CheckCircle, 
-  ShoppingCart, 
-  Timer, 
-  AlertCircle,
-  Info,
-  Move,
-  Plus,
-  Minus
-} from "lucide-react";
 import dynamic from 'next/dynamic';
 
 // Dynamically import Leaflet with no SSR
@@ -30,18 +18,7 @@ const MapComponent = dynamic(
   }
 );
 
-type LotStatus = "construction" | "complete" | "bought" | "sold" | "onTime" | "delayed" | "available";
 type Community = { name: string, lat: number, lng: number };
-
-const statusIcons = {
-  construction: <Construction className="h-4 w-4" />,
-  complete: <CheckCircle className="h-4 w-4" />,
-  bought: <ShoppingCart className="h-4 w-4" />,
-  sold: <Home className="h-4 w-4" />,
-  onTime: <Timer className="h-4 w-4" />,
-  delayed: <AlertCircle className="h-4 w-4" />,
-  available: <Info className="h-4 w-4" />,
-};
 
 const communities: Community[] = [
   { name: "Fox Valley", lat: 41.607442, lng: -93.889172 },
@@ -50,13 +27,11 @@ const communities: Community[] = [
 ];
 
 export function NeighborhoodMap() {
-  const mapRef = useRef<any>(null);
   const [selectedCommunity, setSelectedCommunity] = useState<Community>(communities[0]);
 
   const handleCommunityChange = (name: string) => {
     const community = communities.find(c => c.name === name);
-    if (community && mapRef.current?.recenterMap) {
-      mapRef.current.recenterMap(community.lat, community.lng, 16);
+    if (community) {
       setSelectedCommunity(community);
     }
   };
@@ -74,7 +49,11 @@ export function NeighborhoodMap() {
           <ToggleGroup
             type="single"
             value={selectedCommunity.name}
-            onValueChange={handleCommunityChange}
+            onValueChange={(value) => {
+              if (value) {
+                handleCommunityChange(value);
+              }
+            }}
           >
             {communities.map((community) => (
               <ToggleGroupItem
@@ -87,7 +66,10 @@ export function NeighborhoodMap() {
             ))}
           </ToggleGroup>
         </div>
-        <MapComponent />
+        <MapComponent 
+          center={{ lat: selectedCommunity.lat, lng: selectedCommunity.lng }}
+          zoom={16}
+        />
       </CardContent>
     </Card>
   );

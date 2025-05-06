@@ -35,6 +35,14 @@ export function TradeComparison() {
     tasksForTrade(trade).includes(selectedTask.id)
   );
 
+  // Reset selected companies when task changes
+  const handleTaskChange = (taskId: number) => {
+    const newTask = tasks.find((t) => t.id === taskId)!;
+    setSelectedTask(newTask);
+    setSelectedCompanies([]);
+    setSelectedTrades([]);
+  };
+
   const addTrade = (trade: (typeof trades)[0]) => {
     setSelectedTrades([...selectedTrades, trade]);
   };
@@ -44,9 +52,10 @@ export function TradeComparison() {
   };
 
   const toggleSelectAll = () => {
-    selectedTrades.length === trades.length
+    const tradesForCurrentTask = tradesForTask;
+    selectedTrades.length === tradesForCurrentTask.length
       ? setSelectedTrades([])
-      : setSelectedTrades(trades);
+      : setSelectedTrades(tradesForCurrentTask);
   };
 
   const getTradeValue = (trade: (typeof trades)[0]) => {
@@ -72,12 +81,15 @@ export function TradeComparison() {
   };
 
   const applyFilters = () => {
-    const filteredTrades = trades.filter(trade => 
+    const filteredTrades = tradesForTask.filter(trade => 
       selectedCompanies.length === 0 || selectedCompanies.includes(trade.id)
     );
     setSelectedTrades(filteredTrades);
     setIsFilterOpen(false);
   };
+
+  // Get companies for the selected task
+  const companiesForSelectedTask = tradesForTask;
 
   // Group trades by their current task
   const groupedTrades = tasks.reduce((acc, task) => {
@@ -112,11 +124,7 @@ export function TradeComparison() {
             <select
               id="task"
               value={selectedTask.id}
-              onChange={(e) =>
-                setSelectedTask(
-                  tasks.find((t) => t.id === Number(e.target.value))!
-                )
-              }
+              onChange={(e) => handleTaskChange(Number(e.target.value))}
               className="mt-1 block w-full pl-2 pr-6 py-2 text-sm border border-light-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-100"
             >
               {tasks.map((task) => (
@@ -196,44 +204,41 @@ export function TradeComparison() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                  <DialogTitle>Filter Companies by Task</DialogTitle>
+                  <DialogTitle>{selectedTask.name}</DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4">
-                  {sortedTaskNames.map((taskName) => (
-                    <div key={taskName} className="border rounded-lg overflow-hidden">
-                      <button
-                        onClick={() => toggleSection(taskName)}
-                        className="w-full flex items-center justify-between p-3 bg-light-100 hover:bg-light-200 transition-colors"
-                      >
-                        <span className="font-medium">{taskName}</span>
-                        <ChevronDown 
-                          className={`h-4 w-4 transition-transform ${
-                            expandedSections[taskName] ? 'rotate-180' : ''
-                          }`}
-                        />
-                      </button>
-                      {expandedSections[taskName] && (
-                        <div className="p-3 space-y-2">
-                          {groupedTrades[taskName].map((trade) => (
-                            <div key={trade.id} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={`company-${trade.id}`}
-                                checked={selectedCompanies.includes(trade.id)}
-                                onCheckedChange={() => toggleCompany(trade.id)}
-                              />
-                              <label
-                                htmlFor={`company-${trade.id}`}
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                              >
-                                {trade.name}
-                              </label>
-                            </div>
-                          ))}
+                  <div className="border rounded-lg overflow-hidden">
+                    <div className="p-3 space-y-2">
+                      {companiesForSelectedTask.map((trade) => (
+                        <div key={trade.id} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={`company-${trade.id}`}
+                            checked={selectedCompanies.includes(trade.id)}
+                            onCheckedChange={() => toggleCompany(trade.id)}
+                          />
+                          <label
+                            htmlFor={`company-${trade.id}`}
+                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                          >
+                            {trade.name}
+                          </label>
                         </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
-                  <div className="flex justify-end">
+                  </div>
+                  <div className="flex justify-end space-x-2">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => {
+                        if (selectedCompanies.length === companiesForSelectedTask.length) {
+                          setSelectedCompanies([]);
+                        } else {
+                          setSelectedCompanies(companiesForSelectedTask.map(trade => trade.id));
+                        }
+                      }}
+                    >
+                      {selectedCompanies.length === companiesForSelectedTask.length ? 'Deselect All' : 'Select All'}
+                    </Button>
                     <Button onClick={applyFilters}>Apply Filters</Button>
                   </div>
                 </div>
