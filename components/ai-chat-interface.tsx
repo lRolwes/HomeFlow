@@ -12,14 +12,14 @@ export function AIChatInterface() {
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    const newMessages = [...messages, { role: "user", content: input }]
+    const newMessages = [...messages, { role: "user" as const, content: input }]
     setMessages(newMessages)
     setInput("")
 
     // Here you would typically send the message to your AI backend
     // For now, we'll just simulate a response
     setTimeout(() => {
-      setMessages([...newMessages, { role: "ai", content: "This is a simulated AI response." }])
+      setMessages([...newMessages, { role: "ai" as const, content: "This is a simulated AI response." }])
     }, 1000)
   }
 
@@ -31,8 +31,17 @@ export function AIChatInterface() {
       <CardContent>
         <div className="h-[300px] overflow-y-auto mb-4 p-4 border rounded">
           {messages.map((message, index) => (
-            <div key={index} className={`mb-2 ${message.role === "user" ? "text-right" : "text-left"}`}>
-              <span className={`inline-block p-2 rounded ${message.role === "user" ? "bg-blue-100" : "bg-gray-100"}`}>
+            <div 
+              key={index} 
+              className={`mb-2 ${message.role === "user" ? "text-right" : "text-left"}`}
+            >
+              <span 
+                className={`inline-block p-2 rounded ${
+                  message.role === "user" 
+                    ? "bg-blue-500 text-white" 
+                    : "bg-gray-100"
+                }`}
+              >
                 {message.content}
               </span>
             </div>

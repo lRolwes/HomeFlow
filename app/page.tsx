@@ -3,77 +3,103 @@ import { AIChatInterface } from "../components/ai-chat-interface";
 import { ProjectManagerComparison } from "../components/project-manager-comparison";
 import { TradeComparison } from "@/components/trade-comparison";
 import { WeatherAlert } from "@/components/weather-alert";
+import { NeighborhoodMap } from "@/components/neighborhood-map";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CancellationAlert } from "@/components/cancellation-alert";
 
 export default function Home() {
   return (
-    <div className="px-[100px] bg-light-50">
-      {/* alerts */}
-      <WeatherAlert
-        title="Weather Alert"
-        description="There is a 60% chance of rain this Thursday."
-        jobs={["Crooked Creek 79 - Roofing", "Whispering Pines 1 - Siding"]}
-      />
+    <div className="min-h-screen bg-light-50 px-4 py-6 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* alerts */}
+        <WeatherAlert />
+        <CancellationAlert />
 
-      {/* weekly summary */}
-      <div className="m-4 p-10 text-blue-200">
-        <h1 className="text-lg font-2xl mb-4 font-montserrat-alternates font-bold text-blue-200">
-          Weekly Summary
-        </h1>
-        <div className="flex justify-between flex-row">
-          <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
-            <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">
-              Homes Under Construction
-            </h3>
-            <p className="text-8xl font-circular-std mb-4 text-dark-100">54</p>
-          </div>
-          <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
-            <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">
-              Finishes This Week
-            </h3>
-            <p className="text-8xl font-circular-std mb-4 text-dark-100">3</p>
-          </div>
-          <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
-            <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">
-              Jobsite Health
-            </h3>
-            <div className="w-full h-4 bg-gray-300 rounded-full">
-              <div
-                className="h-4 bg-dark-100 rounded-full"
-                style={{ width: "95%" }}
-              ></div>
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-center p-8 rounded rounded-md shadow-xl bg-light-100 border-4 border-dark-100">
-            <h3 className="text-lg font-medium mb-4 font-montserrat-alternates text-blue-200">
-              Progress to Yearly Goal
-            </h3>
-            <div className="w-full h-4 bg-gray-300 rounded-full">
-              <div
-                className="h-4 bg-dark-100 rounded-full"
-                style={{ width: "95%" }}
-              ></div>
-            </div>
+        {/* weekly summary */}
+        <div className="space-y-4">
+          <h1 className="text-2xl font-bold font-montserrat-alternates text-dark-100">
+            Weekly Summary
+          </h1>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <Card className="hover:shadow-lg transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="text-lg font-medium text-blue-200">
+                  Homes Under Construction
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-6xl font-bold font-circular-std text-dark-100">54</p>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="text-lg font-medium text-blue-200">
+                  Finishes This Week
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-6xl font-bold font-circular-std text-dark-100">3</p>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="text-lg font-medium text-blue-200">
+                  Jobsite Health
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="w-full h-3 bg-light-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-dark-100 rounded-full transition-all duration-500"
+                      style={{ width: "95%" }}
+                    />
+                  </div>
+                  <p className="text-2xl font-bold font-circular-std text-dark-100">95%</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-all duration-300">
+              <CardHeader>
+                <CardTitle className="text-lg font-medium text-blue-200">
+                  Progress to Yearly Goal
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="w-full h-3 bg-light-200 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-dark-100 rounded-full transition-all duration-500"
+                      style={{ width: "95%" }}
+                    />
+                  </div>
+                  <p className="text-2xl font-bold font-circular-std text-dark-100">95%</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="h-full">
+            <ProjectManagerComparison />
+          </div>
+          <div className="h-full">
+            <TradeComparison />
+          </div>
+        </div>
+
+        {/* Neighborhood Map */}
+        <NeighborhoodMap />
+
+        {/* AI Analyst */}
+        <div className="mt-8">
+          <AIChatInterface />
+        </div>
       </div>
-
-      <ProjectManagerComparison />
-
-      <TradeComparison />
-
-      {/* AI Analyst */}
-      <div className="m-4 p-10 text-blue-200">
-        <AIChatInterface />
-      </div>
-
-      {/* <h1 className="text-4xl font-bold mb-4">Font Test</h1>
-      <p className="text-lg font-circular-std mb-4">This is Circular Std</p>
-      <p className="text-lg font-poppins mb-4">This is Poppins</p>
-      <p className="text-lg font-montserrat-alternates mb-4">This is Montserrat Alternates</p>
-      <p className="text-lg mb-4">This is the default font</p>
-      
-      <div className="mt-8 p-4 bg-blue-100 text-white">Blue 100 background</div>
-      <div className="mt-4 p-4 bg-orange text-white">Orange background</div> */}
     </div>
   );
 }
